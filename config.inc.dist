@@ -1,0 +1,19 @@
+<?php
+// The host can contain the following macros that will be expanded as follows:
+// %h - user's IMAP hostname
+// %n - http hostname ($_SERVER['SERVER_NAME'])
+// %d - domain (http hostname without the first part)
+// For example %n = mail.domain.tld, %d = domain.tld
+// Defaults to 'localhost' if set to null
+$rcmail_config['cpanel_filters_host'] = '';
+
+// Set the cPanel port (no quotes)
+// Defaults to 2083 is set to null
+$rcmail_config['cpanel_filters_port'] = 2083;
+
+// cPanel admin account username
+$rcmail_config['cpanel_filters_user'] = '';
+
+// cPanel admin account password
+$rcmail_config['cpanel_filters_pass'] = '';
+?>

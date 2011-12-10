@@ -1,0 +1,35 @@
+RoundCube cPanel Filters Plugin
+=====================================
+cPanel Filters adds the ability for each user to manage their own filters.
+This is especially useful for admins who run a public facing interface in
+preference to cPanel's built-in RC instance.
+
+This plugin was inspired and heavily based on the "managesieve" and "sieverules"
+plugins. Thank you to their authors and any contributors
+
+Features:
+ * Relies on cPanel's own xmlapi.php class
+
+Requirements
+=====================================
+None that I know of. Plugin was tested and developed on the stable 0.6 release.
+
+
+Installation
+=====================================
+1. Download latest stable release from GitHub
+2. Extract the downloaded archive into 'cpanel_filters' directory in plugins/ folder. 
+3. Add 'cpanel_filters' to $rcmail_config['plugins'] in your RoundCube config
+
+
+Configuration
+=====================================
+The default config file is plugins/cpanel_filters/config.inc.php.dist
+Rename this to plugins/cpanel_filters/config.inc.php
+You will need to put in the Account username:password for cPanel
+
+
+License
+=====================================
+This plugin is distributed under the GPLv3 license. Please see http://www.gnu.org/licenses/gpl-3.0.txt
+for the complete license.
