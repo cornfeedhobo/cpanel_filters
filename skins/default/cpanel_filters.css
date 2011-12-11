@@ -14,7 +14,7 @@
 /***********************************************************
                         LIST BOX
 ***********************************************************/
-#filterslist {
+#filterlist {
     position: absolute;
     left: 20px;
     top: 85px;
@@ -24,25 +24,28 @@
     /* css hack for IE */
     height: expression((parseInt(document.documentElement.clientHeight)-140)+'px');
 }
-#filterslist #filters-table {
+#filterlist #filterlist-table {
     width: 100%;
     table-layout: fixed;
     /* css hack for IE */
     width: expression(document.getElementById('filterslist').clientWidth);
 }
-#filterslist #filters-table td.control a {
+#filterlist #filterlist-table td.control a {
     display: block;
     float: right;
     width: 16px;
     height: 16px;
     background-image: url(icons.png);
 }
-#filterslist #filters-table td.control a.up_arrow {
+#filterlist #filterlist-table td.control a.up_arrow {
     background-position: 0 0;
 }
-#filterslist #filters-table td.control a.down_arrow {
+#filterlist #filterlist-table td.control a.down_arrow {
     background-position: 0 -18px;
 }
+
+
+
 #filter-box {
   position: absolute;
   top: 85px;

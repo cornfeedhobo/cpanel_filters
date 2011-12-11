@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title><roundcube:object name="pagetitle" /></title>
+        <roundcube:include file="/includes/links.html" />
+        <link rel="stylesheet" type="text/css" href="/this/cpanel_filters.css" />
+    </head>
+    <body class="iframe">
+        <div id="filter-title" class="boxtitle">
+            <roundcube:label name="cpanel_filters.filterDef" />
+        </div>
+        <div id="filter-form" class="boxcontent">
+            <roundcube:object name="filterform" />
+            <div id="filter-form-footer">
+                <roundcube:button command="plugin.cpanel_filters-delete" type="input" class="button" label="delete" condition="env:action=='plugin.cpanel_filters-edit'" />
+                <roundcube:button command="plugin.cpanel_filters-save" type="input" class="button mainaction" label="save" />
+            </div>
+            </form>
+        </div>
+    </body>
+</html>

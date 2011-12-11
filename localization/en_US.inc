@@ -26,7 +26,13 @@ $labels['filterRedirect']               = 'Redirect to Email';
 $labels['filterFail']                   = 'Fail with message';
 $labels['filterStop']                   = 'Stop Processing rules';
 $labels['filterNew']                    = 'New filter';
-
+$labels['filterDef']                    = 'Filter Definition';
+$labels['filterRules']                  = 'For incoming mail:';
+$labels['filterActions']                = '...execute the following actions:';
+$labels['filterAdd']                    = 'Add';
+$labels['filterDelete']                 = 'Delete';
+$labels['filterOr']                     = 'Or';
+$labels['filterAnd']                    = 'And';
 // TO BE EDITED
 $messages = array();
 $messages['filterunknownerror'] = 'Unknown server error';
