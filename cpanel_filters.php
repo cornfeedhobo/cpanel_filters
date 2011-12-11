@@ -55,6 +55,7 @@ class cpanel_filters extends rcube_plugin {
         // register javascript actions
         $this->register_action('plugin.cpanel_filters',array($this,'cpanel_filters_actions'));
         $this->register_action('plugin.cpanel_filters-add',array($this,'cpanel_filters_actions'));
+        $this->register_action('plugin.cpanel_filters-edit',array($this,'cpanel_filters_actions'));
         
         // include main js script
         $this->include_script('cpanel_filters.js');

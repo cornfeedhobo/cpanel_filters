@@ -12,7 +12,8 @@ if (window.rcmail) {
         rcmail.add_element(tab, 'tabs');
         
         if ( rcmail.env.action == 'plugin.cpanel_filters' ||
-            rcmail.env.action == 'plugin.cpanel_filters-add' ) {
+            rcmail.env.action == 'plugin.cpanel_filters-add' ||
+            rcmail.env.action == 'plugin.cpanel_filters-edit') {
             
              if (rcmail.gui_objects.filterlist) {
                 var p = rcmail;
@@ -27,6 +28,7 @@ if (window.rcmail) {
                 rcmail.filterlist.clear_selection();
                 rcmail.cpf_frame(null,'plugin.cpanel_filters-add');
             }, true);
+            
         }
     });
 };
@@ -36,9 +38,9 @@ if (window.rcmail) {
 /*********************************************************/
 // Select list item handler
 rcube_webmail.prototype.cpf_select = function(list) {
-//    var id = list.get_single_selection();
-//    if (id != null)
-//        this.load_cpf_frame(list.rows[id].uid, 'plugin.cpanel_filters-edit');
+    var id = list.get_single_selection();
+    if (id != null)
+        this.cpf_frame(list.rows[id].uid, 'plugin.cpanel_filters-edit');
 };
 // Load the framed filteredit
 rcube_webmail.prototype.cpf_frame = function(fid, action) {
