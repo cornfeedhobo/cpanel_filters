@@ -103,7 +103,7 @@ class cpanel_filters extends rcube_plugin {
     } // end cpanel_filters_actions()
     
     /**
-     * Custom rcmail->output->send wrapper that handles the framed content
+     *Custom rcmail->output->send wrapper that handles the framed content
      */
     function cpanel_filters_send() {
         // Handle the frame
@@ -116,10 +116,9 @@ class cpanel_filters extends rcube_plugin {
     } // end cpanel_filters_send
     
     /**
-     * Create the filter list on the side.
-     * 
+     *Create the filter list on the side.
      * @param string $attrib Provided by RC's template engine
-     * @return type XHTML output
+     * @return mixed XHTML output
      */
     function html_filterlist($attrib) {
         // Set the HTML ID attribute if not specified
@@ -140,10 +139,9 @@ class cpanel_filters extends rcube_plugin {
     } // end html_filterlist
     
     /**
-     * Create a frame to load all filter edits in; starts with blank frame
-     * 
+     *Create a frame to load all filter edits in; starts with blank frame 
      * @param type $attrib Provided by RC's template engine
-     * @return type XHTML output
+     * @return mixed XHTML output
      */
     function html_filterframe($attrib) {
         // Set the HTML ID attribute if not specified
@@ -156,6 +154,11 @@ class cpanel_filters extends rcube_plugin {
         return html::tag('iframe', $attrib);
     } // end html_filterframe
     
+    /**
+     *Create the XHTML form for filter editing
+     * @param type $attr Provided by RC's template engine
+     * @return mixed XHTML output
+     */
     function html_filterform($attr) {
         // Set the HTML ID attribute if not specified
         if (!$attrib['id'])
@@ -231,7 +234,7 @@ class cpanel_filters extends rcube_plugin {
      * @param type $fid Filter ID #
      * @param type $rid Rule ID #
      * @param bool $div Include <div> wrapper
-     * @return type XHTML output
+     * @return mixed XHTML output
      */
     function parse_rules( $fid, $rid, $div = true ) {  // fid = NULL,rid = int(0)
         $rule = $this->filters[$fid]['rules'][$rid];  // returns NULL
@@ -310,7 +313,7 @@ class cpanel_filters extends rcube_plugin {
      * @param type $fid Filter ID #
      * @param type $aid Action ID #
      * @param bool $div Include <div> wrapper
-     * @return type XHTML output
+     * @return mixed XHTML output
      */
     function parse_actions( $fid, $aid, $div = true ) {
         $action = $this->filters[$fid]['actions'][$aid];
