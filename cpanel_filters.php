@@ -282,11 +282,11 @@ class cpanel_filters extends rcube_plugin {
                 'id'    => 'opt'.$rid,
                 'style' => 'display:'.( $rows<2 ? 'none' : 'inline' ),
             ) );
-        $select_opt->add( Q($this->gettext('filterOr') ), Q('or') );
-        $select_opt->add( Q($this->gettext('filterAnd') ), Q('and') );
-//        if ( isset($rule['opt']) )
-//            $out .= $select_opt->show( Q($rule['opt']) );
-//        else
+        $select_opt->add( Q($this->gettext('filterOr')), Q('or') );
+        $select_opt->add( Q($this->gettext('filterAnd')), Q('and') );
+        if ( isset($rule['opt']) )
+            $out .= $select_opt->show( ( $rule['opt']=='and' ? Q($this->gettext('filterAnd')) : Q($this->gettext('filterOr')) ) );
+        else
             $out .= $select_opt->show();
         $out .= '</td>';
         
