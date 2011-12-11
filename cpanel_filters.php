@@ -280,7 +280,7 @@ class cpanel_filters extends rcube_plugin {
         $select_opt = new html_select( array(
                 'name'  => '_opts['.$rid.'][opt]',
                 'id'    => 'opt'.$rid,
-                'style' => 'display:'.( $rows<2 ? 'none' : 'inline' ),
+                'style' => 'display:'.( ( $rows<2 || $rid==($rows-1) ) ? 'none' : 'inline' ),
             ) );
         $select_opt->add( Q($this->gettext('filterOr')), Q('or') );
         $select_opt->add( Q($this->gettext('filterAnd')), Q('and') );
