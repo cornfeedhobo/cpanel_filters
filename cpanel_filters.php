@@ -348,16 +348,22 @@ class cpanel_filters extends rcube_plugin {
                 !isset($action['action']) ) ? Q($action['dest'], 'strict', false) : '').
                 '" size="40" style="display:' .
                 ( ( $action['action']=='deliver' || $action['action']=='fail' ) ? 'inline' : 'none' ) . '" />';
-        if ($action['action'] == 'save')
-            $mailbox = $action['dest'];
-        else
+        if ($action['action'] == 'save') {
+            // TODO: add handler for windows slashes
+            if ( end(explode('/',$action['dest'])) == 'INBOX' ) {
+                $mailbox = 'Inbox';
+            } else {
+                $mailbox = substr(end(explode('/',$action['dest'])),1,(strlen(end(explode('/',$action['dest'])))-1));
+            }
+        } else {
             $mailbox = '';
+        }
         $this->rcmail->imap_connect();
         $select_box = rcmail_mailbox_select(array(
 	        'realnames' => false,
 	        'maxlength' => 100,
-	        'id' => 'action_mailbox' . $id,
-	        'name' => '_action_mailbox[]',
+	        'id' => 'mailbox'.$aid,
+	        'name' => '_actions['.$aid.'][folder]',
 	        'style' => 'display:'.
                 ( ( $action['action']=='save' || !isset($action['action']) ) ? 'inline' : 'none' ),
 	    ));
