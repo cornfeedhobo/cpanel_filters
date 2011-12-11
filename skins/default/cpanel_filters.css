@@ -1,0 +1,67 @@
+/* 
+    Document   : cpanel_filters
+    Created on : Dec 3, 2011, 1:01:08 PM
+    Author     : cornfeed
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+/***********************************************************
+                        LIST BOX
+***********************************************************/
+#filterslist {
+    position: absolute;
+    left: 20px;
+    top: 85px;
+    bottom: 20px;
+    border: 1px solid #999999;
+    overflow: auto;
+    /* css hack for IE */
+    height: expression((parseInt(document.documentElement.clientHeight)-140)+'px');
+}
+#filterslist #filters-table {
+    width: 100%;
+    table-layout: fixed;
+    /* css hack for IE */
+    width: expression(document.getElementById('filterslist').clientWidth);
+}
+#filterslist #filters-table td.control a {
+    display: block;
+    float: right;
+    width: 16px;
+    height: 16px;
+    background-image: url(icons.png);
+}
+#filterslist #filters-table td.control a.up_arrow {
+    background-position: 0 0;
+}
+#filterslist #filters-table td.control a.down_arrow {
+    background-position: 0 -18px;
+}
+#filter-box {
+  position: absolute;
+  top: 85px;
+  right: 20px;
+  bottom: 20px;
+  border: 1px solid #999999;
+  overflow: hidden;
+  /* css hack for IE */
+  width: expression((parseInt(document.documentElement.clientWidth)-40-parseInt(document.getElementById('filterslist').offsetWidth))+'px');
+  height: expression((parseInt(document.documentElement.clientHeight)-140)+'px');
+}
+#filter-form fieldset legend {
+    font-weight: bold;
+    color: #505050;
+}
+#filter-frame {
+  border: none;
+}
+body.iframe {
+  min-width: 740px;
+  width: expression(Math.max(740, document.documentElement.clientWidth)+'px');
+}
