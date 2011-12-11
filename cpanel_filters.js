@@ -50,3 +50,14 @@ rcube_webmail.prototype.cpf_frame = function(fid, action) {
         target.location.href = this.env.comm_path+'&_action='+action+'&_framed=1&_fid='+fid+'&_unlock='+msgid;
     }
 }
+
+rcube_webmail.prototype.cpf_ruledel = function(rid){
+    if (confirm(this.get_label('cpanel_filters.filterRuledelete'))) {
+        $('div#rulerow'+rid).remove();
+    }
+};
+rcube_webmail.prototype.cpf_actiondel = function(aid){
+    if (confirm(this.get_label('cpanel_filters.filterActiondelete'))) {
+        $('div#actionrow'+aid).remove();
+    }
+};

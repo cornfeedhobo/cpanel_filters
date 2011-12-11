@@ -297,7 +297,7 @@ class cpanel_filters extends rcube_plugin {
                 Q($this->gettext('filterAdd')). '" onclick="rcmail.cpanel_filters_ruleadd(' .
                 $rid. ')" class="button" /> ';
         $out .= '<input type="button" id="ruledel' .$rid. '" value="' .
-                Q($this->gettext('filterDelete')). '" onclick="rcmail.cpanel_filters_ruledel(' .
+                Q($this->gettext('filterDelete')). '" onclick="rcmail.cpf_ruledel(' .
                 $rid. ')" class="button' . ($rows<2 ? ' disabled' : '') . '"' .
                 ($rows<2 ? ' disabled="disabled"' : '') . ' />';
         $out .= '</td></tr></table>';
@@ -375,7 +375,7 @@ class cpanel_filters extends rcube_plugin {
         $out .= '<input type="button" id="actionadd'.$aid.'" value="'.Q($this->gettext('filterAdd')) .
                 '" onclick="rcmail.cpanel_filters_actionadd('.$aid.')" class="button" /> ';
         $out .= '<input type="button" id="actiondel'.$aid.'" value="'.Q($this->gettext('filterDelete')) .
-                '" onclick="rcmail.cpanel_filters_actiondel('.$aid.')" class="button' .
+                '" onclick="rcmail.cpf_actiondel('.$aid.')" class="button' .
                 ($rows<2 ? ' disabled' : '') .'"'. ($rows<2 ? ' disabled="disabled"' : '') .' />';
         $out .= '</td></tr></table>';
         
