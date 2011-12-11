@@ -225,6 +225,14 @@ class cpanel_filters extends rcube_plugin {
         return $out;
     }
     
+    /**
+     *Parse all the rules for the filter supplied
+     * If using 'Add': fid = NULL, rid = int(0), $action = NULL, $rows = int(0)
+     * @param type $fid Filter ID #
+     * @param type $rid Rule ID #
+     * @param bool $div Include <div> wrapper
+     * @return type XHTML output
+     */
     function parse_rules( $fid, $rid, $div = true ) {  // fid = NULL,rid = int(0)
         $rule = $this->filters[$fid]['rules'][$rid];  // returns NULL
         $rows = sizeof($this->filters[$fid]['rules']);  // returns int(0)
@@ -296,9 +304,17 @@ class cpanel_filters extends rcube_plugin {
         return $out;
     } // end parse_rules()
     
-    function parse_actions( $fid, $aid, $div = true ) {  // fid = NULL,aid = int(0)
-        $action = $this->filters[$fid]['actions'][$aid];  // returns NULL
-        $rows = sizeof($this->filters[$fid]['actions']);  // returns int(0)
+    /**
+     *Parse all the actions for the filter supplied
+     * If using 'Add': fid = NULL, aid = int(0), $action = NULL, $rows = int(0)
+     * @param type $fid Filter ID #
+     * @param type $aid Action ID #
+     * @param bool $div Include <div> wrapper
+     * @return type XHTML output
+     */
+    function parse_actions( $fid, $aid, $div = true ) {
+        $action = $this->filters[$fid]['actions'][$aid];
+        $rows = sizeof($this->filters[$fid]['actions']);
         
         // handle div wrapper for dynamic adding
         $out = $div ? '<div class="actionrow" id="actionrow'.$aid.'">'."\n" : '';
