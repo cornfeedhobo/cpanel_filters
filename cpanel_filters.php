@@ -100,6 +100,20 @@ class cpanel_filters extends rcube_plugin {
     
     function cpanel_filters_actions() {
         $this->_start();
+        
+        if ($action = get_input_value('_act', RCUBE_INPUT_GPC)) {
+            // Force an integer, because there is no chance of NULL
+            $fid = (int) get_input_value('_fid', RCUBE_INPUT_GET);
+            
+            if ($action == 'ruleadd') {
+                // JS will rename rows anyways, why care about id#?
+                $bttnrow = get_input_value('_rid', RCUBE_INPUT_GPC);
+                $content = $this->parse_rules($fid, 4097);
+                $this->rcmail->output->command('cpf_insertrow', $content, $bttnrow);
+            }
+            $this->rcmail->output->send();
+        }
+        
         $this->cpanel_filters_send();
     } // end cpanel_filters_actions()
     
@@ -293,13 +307,12 @@ class cpanel_filters extends rcube_plugin {
         // Create Add/Delete buttons
         // MIGHT CHANGE TO USE JQUERY'S .click() HANDLER
         $out .= '<td class="rowbuttons">';
-        $out .= '<input type="button" id="ruleadd' .$rid. '" value="' .
-                Q($this->gettext('filterAdd')). '" onclick="rcmail.cpanel_filters_ruleadd(' .
-                $rid. ')" class="button" /> ';
-        $out .= '<input type="button" id="ruledel' .$rid. '" value="' .
-                Q($this->gettext('filterDelete')). '" onclick="rcmail.cpf_ruledel(' .
-                $rid. ')" class="button' . ($rows<2 ? ' disabled' : '') . '"' .
-                ($rows<2 ? ' disabled="disabled"' : '') . ' />';
+        $out .= '<input type="button" id="ruleadd' . $rid . '" value="' .
+                    Q( $this->gettext('filterAdd') ) . '" class="button" /> ';                
+        $out .= '<input type="button" id="ruledel' . $rid . '" value="' .
+                    Q( $this->gettext('filterDelete') ) . '" class="button' .
+                    ($rows<2 ? ' disabled' : '') . '"' .
+                    ($rows<2 ? ' disabled="disabled"' : '') . ' />';
         $out .= '</td></tr></table>';
 
         // Close the div wrapper if set
@@ -373,7 +386,7 @@ class cpanel_filters extends rcube_plugin {
         // add/del buttons
         $out .= '<td class="rowbuttons">';
         $out .= '<input type="button" id="actionadd'.$aid.'" value="'.Q($this->gettext('filterAdd')) .
-                '" onclick="rcmail.cpanel_filters_actionadd('.$aid.')" class="button" /> ';
+                '" onclick="rcmail.cpf_actionadd('.$aid.')" class="button" /> ';
         $out .= '<input type="button" id="actiondel'.$aid.'" value="'.Q($this->gettext('filterDelete')) .
                 '" onclick="rcmail.cpf_actiondel('.$aid.')" class="button' .
                 ($rows<2 ? ' disabled' : '') .'"'. ($rows<2 ? ' disabled="disabled"' : '') .' />';
