@@ -115,6 +115,20 @@ class cpanel_filters extends rcube_plugin {
                 $bttnrow = get_input_value('_aid', RCUBE_INPUT_GPC);
                 $content = $this->parse_actions($fid, 4097);
                 $this->rcmail->output->command('cpf_insertrow', $content, $bttnrow, 'actionrow');
+            } elseif ($action == 'delete') {
+                $res[] = json_decode($this->xmlapi->api2_query( $this->cuser,
+                        'Email', 'deletefilter', array(
+                            account     => $this->rcmail->user->get_username(),
+                            filtername  => $this->filters[$fid]['filtername'],
+                        ) ) );
+                $msg = get_object_vars($res['0']);
+                $msg = get_object_vars($msg['cpanelresult']);
+                $msg = get_object_vars($msg['data'][0]);
+                if ( strpos( $msg['statusmsg'], 'deleted') === FALSE ) {
+                    $this->rc->output->show_message('cpanel_filters.filterDeleteerror','error');
+                } else {
+                    $this->rc->output->show_message('cpanel_filters.filterDeleted','notice',null,true,6);
+                }
             }
             $this->rcmail->output->send();
         }

@@ -37,13 +37,14 @@ $labels['filterAnd']                    = 'And';
 $messages = array();
 $messages['filterRuledelete']           = 'Are you sure, you want to delete selected rule?';
 $messages['filterActiondelete']         = 'Are you sure, you want to delete selected action?';
+$messages['filterDelete']               = 'Do you really want to delete selected filter?';
+$messages['filterDeleted']              = 'Filter deleted successfully';
+$messages['filterDeleteerror']          = 'Unable to delete filter. Server error occured';
+
 $messages['filterunknownerror'] = 'Unknown server error';
 $messages['filterconnerror'] = 'Unable to connect to managesieve server';
-$messages['filterdeleteerror'] = 'Unable to delete filter. Server error occured';
-$messages['filterdeleted'] = 'Filter deleted successfully';
 $messages['filtersaved'] = 'Filter saved successfully';
 $messages['filtersaveerror'] = 'Unable to save filter. Server error occured';
-$messages['filterdeleteconfirm'] = 'Do you really want to delete selected filter?';
 $messages['forbiddenchars'] = 'Forbidden characters in field';
 $messages['cannotbeempty'] = 'Field cannot be empty';
 $messages['setactivateerror'] = 'Unable to activate selected filters set. Server error occured';
