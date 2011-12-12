@@ -39,10 +39,10 @@ class cpanel_filters extends rcube_plugin {
         'filterNotmatch'        => 'does not match',
     );
     private $actions = array(
-        'filterDeliver'     => 'save',
-        'filterRedirect'    => 'deliver',
-        'filterFail'        => 'fail',
-//        'filterStop'        => 'finish',  // might cause unexpected behaviour
+        'save'      => 'filterDeliver',
+        'deliver'   => 'filterRedirect',
+        'fail'      => 'filterFail',
+//        'finish'    => 'filterStop',  // might cause unexpected behaviour
     );
     
     /**
@@ -109,7 +109,12 @@ class cpanel_filters extends rcube_plugin {
                 // JS will rename rows anyways, why care about id#?
                 $bttnrow = get_input_value('_rid', RCUBE_INPUT_GPC);
                 $content = $this->parse_rules($fid, 4097);
-                $this->rcmail->output->command('cpf_insertrow', $content, $bttnrow);
+                $this->rcmail->output->command('cpf_insertrow', $content, $bttnrow, 'rulerow');
+            } elseif ($action == 'actionadd') {
+                // JS will rename rows anyways, why care about id#?
+                $bttnrow = get_input_value('_aid', RCUBE_INPUT_GPC);
+                $content = $this->parse_actions($fid, 4097);
+                $this->rcmail->output->command('cpf_insertrow', $content, $bttnrow, 'actionrow');
             }
             $this->rcmail->output->send();
         }
@@ -345,7 +350,7 @@ class cpanel_filters extends rcube_plugin {
 //                'onchange'  => 'action_type_select(' .$aid. ')'
             ));
         foreach($this->actions as $name => $act)
-            $select_action->add( Q($this->gettext($name) ), Q($act) );
+            $select_action->add( Q($this->gettext($act) ), Q($name) );
         if ( isset($action['action']) )
             $out .= $select_action->show( 
                     Q( $this->gettext( $this->actions[$action['action']] ) ) );
@@ -385,11 +390,12 @@ class cpanel_filters extends rcube_plugin {
         
         // add/del buttons
         $out .= '<td class="rowbuttons">';
-        $out .= '<input type="button" id="actionadd'.$aid.'" value="'.Q($this->gettext('filterAdd')) .
-                '" onclick="rcmail.cpf_actionadd('.$aid.')" class="button" /> ';
-        $out .= '<input type="button" id="actiondel'.$aid.'" value="'.Q($this->gettext('filterDelete')) .
-                '" onclick="rcmail.cpf_actiondel('.$aid.')" class="button' .
-                ($rows<2 ? ' disabled' : '') .'"'. ($rows<2 ? ' disabled="disabled"' : '') .' />';
+        $out .= '<input type="button" id="actionadd' . $aid . '" value="' .
+                Q($this->gettext('filterAdd')) . '" class="button" /> ';
+        $out .= '<input type="button" id="actiondel' . $aid . '" value="' .
+                Q($this->gettext('filterDelete')) . '" class="button' .
+                ($rows<2 ? ' disabled' : '') . '"' .
+                ($rows<2 ? ' disabled="disabled"' : '') .' />';
         $out .= '</td></tr></table>';
         
         // Close the div wrapper if set

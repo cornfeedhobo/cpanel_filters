@@ -64,61 +64,91 @@ rcube_webmail.prototype.cpf_ruledel = function(rid){
     if (confirm(this.get_label('cpanel_filters.filterRuledelete'))) {
         $('div#rulerow'+rid).remove();
     }
-    rcmail.cpf_formbuttons('rules');
+    rcmail.cpf_formbuttons('rulerow');
 };
 rcube_webmail.prototype.cpf_actiondel = function(aid){
     if (confirm(this.get_label('cpanel_filters.filterActiondelete'))) {
         $('div#actionrow'+aid).remove();
     }
+    rcmail.cpf_formbuttons('actionrow');
 };
-rcube_webmail.prototype.cpf_insertrow = function(content, bttnrow) {
+rcube_webmail.prototype.cpf_insertrow = function(content, bttnrow, field) {
     if ( content != '' ) {
-        $('div#rulerow'+bttnrow).after(content);
+        $('div#'+field+bttnrow).after(content);
     }
-    rcmail.cpf_formbuttons('rules');
+    rcmail.cpf_formbuttons(field);
 };
 rcube_webmail.prototype.cpf_formbuttons = function(field) {
     // Rename form elements
-    if ( field == 'rules' ) {
-        $('div.rulerow').each(function(i){$(this).attr('id', 'rulerow'+i);});
-        $('select[name$="[part]"]').each(function(i){
-            $(this).attr('name', '_rules['+i+'][part]');
-            $(this).attr('id', 'header'+i);
-        });
-        $('select[name$="[match]"]').each(function(i){
-            $(this).attr('name', '_rules['+i+'][match]');
-            $(this).attr('id', 'match'+i);
-        });
-        $('input[name$="[val]"]').each(function(i){
-            $(this).attr('name', '_rules['+i+'][val]');
-            $(this).attr('id', 'value'+i);
-        });
-        $('select[name$="[opt]"]').each(function(i){
-            $(this).attr('name', '_rules['+i+'][opt]');
-            $(this).attr('id', 'opt'+i);
-        });
-        $('input[id^="ruleadd"]').each(function(i){
-            //$(this).on('click','input[id^="ruleadd"]',function(event){rcmail.cpf_ruleadd(i)});
-            $(this)[0].onclick = function(){rcmail.cpf_ruleadd(i);};
-            $(this).attr('id', 'ruleadd'+i);
-        });
-        $('input[id^="ruledel"]').each(function(i){
-            $(this)[0].onclick = function(){rcmail.cpf_ruledel(i);};
-            $(this).attr('id', 'ruledel'+i);
-            if ( $('div.rulerow').length < 2 ) {
-                $(this).addClass('disabled');
-                $(this).attr('disabled','disabled');
-            } else if ( $('div.rulerow').length > 1 ) {
-                $(this).removeClass('disabled');
-                $(this).removeAttr('disabled');
-            }
-        });
-        $('select[name$="[opt]"]').each(function(i){
-            if ( ( $('div.rulerow').length - 1 ) > i ) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
+    if ( field != null ) {
+        if ( field == 'rulerow' || field == 'both' ) {
+            $('div.rulerow').each(function(i){$(this).attr('id', 'rulerow'+i);});
+            $('select[name$="[part]"]').each(function(i){
+                $(this).attr('name', '_rules['+i+'][part]');
+                $(this).attr('id', 'header'+i);
+            });
+            $('select[name$="[match]"]').each(function(i){
+                $(this).attr('name', '_rules['+i+'][match]');
+                $(this).attr('id', 'match'+i);
+            });
+            $('input[name$="[val]"]').each(function(i){
+                $(this).attr('name', '_rules['+i+'][val]');
+                $(this).attr('id', 'value'+i);
+            });
+            $('select[name$="[opt]"]').each(function(i){
+                $(this).attr('name', '_rules['+i+'][opt]');
+                $(this).attr('id', 'opt'+i);
+            });
+            $('input[id^="ruleadd"]').each(function(i){
+                //$(this).on('click','input[id^="ruleadd"]',function(event){rcmail.cpf_ruleadd(i)});
+                $(this)[0].onclick = function(){rcmail.cpf_ruleadd(i);};
+                $(this).attr('id', 'ruleadd'+i);
+            });
+            $('input[id^="ruledel"]').each(function(i){
+                $(this)[0].onclick = function(){rcmail.cpf_ruledel(i);};
+                $(this).attr('id', 'ruledel'+i);
+                if ( $('div.rulerow').length < 2 ) {
+                    $(this).addClass('disabled');
+                    $(this).attr('disabled','disabled');
+                } else if ( $('div.rulerow').length > 1 ) {
+                    $(this).removeClass('disabled');
+                    $(this).removeAttr('disabled');
+                }
+            });
+            $('select[name$="[opt]"]').each(function(i){
+                if(($('div.rulerow').length-1)>i){$(this).show();}else{$(this).hide();}
+            });
+        }
+        if ( field == 'actionrow' || field == 'both' ) {
+            $('div.actionrow').each(function(i){$(this).attr('id', 'actionrow'+i);});
+            $('select[name$="[action]"]').each(function(i){
+                $(this).attr('name', '_actions['+i+'][action]');
+                $(this).attr('id', 'action'+i);
+            });
+            $('input[name$="[dest]"]').each(function(i){
+                $(this).attr('name', '_actions['+i+'][dest]');
+                $(this).attr('id', 'dest'+i);
+            });
+            $('select[name$="[folder]"]').each(function(i){
+                $(this).attr('name', '_actions['+i+'][folder]');
+                $(this).attr('id', 'mailbox'+i);
+            });
+            $('input[id^="actionadd"]').each(function(i){
+                //$(this).on('click','input[id^="ruleadd"]',function(event){rcmail.cpf_ruleadd(i)});
+                $(this)[0].onclick = function(){rcmail.cpf_actionadd(i);};
+                $(this).attr('id', 'actionadd'+i);
+            });
+            $('input[id^="actiondel"]').each(function(i){
+                $(this)[0].onclick = function(){rcmail.cpf_actiondel(i);};
+                $(this).attr('id', 'actiondel'+i);
+                if ( $('div.actionrow').length < 2 ) {
+                    $(this).addClass('disabled');
+                    $(this).attr('disabled','disabled');
+                } else if ( $('div.actionrow').length > 1 ) {
+                    $(this).removeClass('disabled');
+                    $(this).removeAttr('disabled');
+                }
+            });
+        }
     }
 }
