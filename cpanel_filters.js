@@ -175,7 +175,7 @@ rcube_webmail.prototype.cpf_formbuttons = function(field) {
 
 rcube_webmail.prototype.cpf_reload = function(url) {
     parent.rcmail.set_busy(true);
-    window.top.rcmail.goto_url(url);
+    parent.rcmail.goto_url(url);
     parent.rcmail.set_busy(false);
 }
 
