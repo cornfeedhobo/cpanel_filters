@@ -16,4 +16,7 @@ $rcmail_config['cpanel_filters_user'] = '';
 
 // cPanel admin account password
 $rcmail_config['cpanel_filters_pass'] = '';
+
+// cPanel Maildir (include trailing slash e.g. '/path/to/mail/')
+$rcmail_config['cpanel_filters_maildir'] = '';
 ?>

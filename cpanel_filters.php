@@ -129,7 +129,7 @@ class cpanel_filters extends rcube_plugin {
                     $this->rcmail->output->show_message('cpanel_filters.filterDeleteerror','error');
                 } else {
                     $this->rcmail->output->show_message('cpanel_filters.filterDeleted','notice',null,true,6);
-                    $this->rcmail->output->command('cpf_reload');
+                    $this->rcmail->output->command('cpf_reload', 'plugin.cpanel_filters');
                 }
             }
             $this->rcmail->output->send();
@@ -140,10 +140,73 @@ class cpanel_filters extends rcube_plugin {
     
     function cpanel_filters_save() {
         $this->_start();
-        $nname = get_input_value('_name', RCUBE_INPUT_GPC);
-        $oname = get_input_value('_oldname', RCUBE_INPUT_GPC);
+        $fid            = get_input_value('_fid', RCUBE_INPUT_GPC);
+        $nname          = get_input_value('_name', RCUBE_INPUT_GPC);
+        $oname          = get_input_value('_oldname', RCUBE_INPUT_GPC);
+        $tmp_rules      = get_input_value('_rules', RCUBE_INPUT_GPC);
+        $tmp_actions    = get_input_value('_actions', RCUBE_INPUT_GPC);
         
-        $this->rcmail->output->show_message('you submitted!!!');
+        if ( $nname != '' ) {
+            if ( $nname == $oname ) {
+                $save_basics['account'] = $this->rcmail->user->get_username();
+                $save_basics['filtername'] = $nname;
+            } elseif (true) {
+                $save_basics['account'] = $this->rcmail->user->get_username();
+                $save_basics['filtername'] = $nname;
+                $save_basics['oldfiltername'] = $oname;
+            }
+        } elseif ( $nname == '' ) {
+            $this->rcmail->output->show_message('cpanel_filters.filterMissingName');
+            $this->rcmail->output->command('cpf_reload','plugin.cpanel_filters');
+            $this->cpanel_filters_send();
+            return;
+        }
+        
+        $save_actions = array();
+        foreach($tmp_actions as $i => $iact) {
+            $x = count($save_actions)+1;
+            if ( ( $iact['action'] == 'fail' || $iact['action'] == 'deliver') 
+                    && $iact['dest'] == '' ) {
+                continue;
+            } elseif ( $iact['action'] == 'fail' || $iact['action'] == 'deliver' ) {
+                $save_actions['action'.$x] = $iact['action'];
+                $save_dests['dest'.$x] = $iact['dest'];
+            } elseif ( $iact['action'] == 'save' ) {
+                $save_actions['action'.$x] = $iact['action'];
+                if ( $iact['folder'] == 'INBOX' ) {
+                    $save_dests['dest'.$x] = $this->rcmail->config->get('cpanel_filters_maildir').$this->rcmail->user->get_username('local').'/'.$iact['folder'];
+                } else {
+                    $save_dests['dest'.$x] = $this->rcmail->config->get('cpanel_filters_maildir').$this->rcmail->user->get_username('local').'/.'.$iact['folder'];
+                }
+            }
+        }
+        
+        $save_matches = array();
+        foreach($tmp_rules as $i => $irule) {
+            $x = count($save_matches)+1;
+            if ( $irule['val'] == '' ) {
+                continue;
+            } elseif ( $irule['val'] != '' ) {
+                $save_matches['match'.$x] = $irule['match'];
+                $save_parts['part'.$x] = $irule['part'];
+                $save_values['val'.$x] = $irule['val'];
+                $save_options['opt'.$x] = $irule['opt'];
+            }
+        }
+        $save_options['opt'.count($save_options)] = 'or';
+        
+        $save = array_merge($save_basics,$save_actions,$save_dests,$save_matches,$save_parts,$save_values,$save_options);
+        $query = json_decode( $this->xmlapi->api2_query( $this->cuser, 'Email',
+                    'storefilter', $save), true );
+        
+        if ( $query['cpanelresult']['data'][0]['error'] != 0 ||
+                $query['cpanelresult']['data'][0]['result'] != 'Filter Saved.' ) {
+            $this->rcmail->output->show_message('cpanel_filters.filterErrorUnknown');
+        } elseif ( $query['cpanelresult']['data'][0]['result'] == 'Filter Saved.' ) {
+            $this->rcmail->output->show_message('cpanel_filters.filterSaved');
+            $this->rcmail->output->command('cpf_reload','plugin.cpanel_filters');
+            $this->cpanel_filters_send();
+        }
     }
     
     /**

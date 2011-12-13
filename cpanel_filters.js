@@ -31,7 +31,7 @@ if (window.rcmail) {
             
             if (rcmail.env.action == 'plugin.cpanel_filters-add' ||
                 rcmail.env.action == 'plugin.cpanel_filters-edit') {
-                
+                // Register and control the Save button
                 rcmail.register_command('plugin.cpanel_filters-save', function() {
                     if (parent.rcmail && parent.rcmail.filterlist)
                         $('form#filterform').submit();
@@ -40,7 +40,7 @@ if (window.rcmail) {
             
             
             if ( rcmail.env.action == 'plugin.cpanel_filters-edit' ) {
-                // Register form delete button
+                // Register and control the Delete button
                 rcmail.register_command('plugin.cpanel_filters-delete', function() {
                     var id = parent.rcmail.filterlist.get_single_selection();
                     if (confirm(rcmail.get_label('cpanel_filters.filterDeleteconfirm')))
@@ -173,9 +173,9 @@ rcube_webmail.prototype.cpf_formbuttons = function(field) {
     }
 }
 
-rcube_webmail.prototype.cpf_reload = function() {
+rcube_webmail.prototype.cpf_reload = function(url) {
     parent.rcmail.set_busy(true);
-    parent.rcmail.goto_url('plugin.cpanel_filters');
+    window.top.rcmail.goto_url(url);
     parent.rcmail.set_busy(false);
 }
 
