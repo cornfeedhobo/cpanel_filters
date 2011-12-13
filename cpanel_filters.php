@@ -56,6 +56,7 @@ class cpanel_filters extends rcube_plugin {
         $this->register_action('plugin.cpanel_filters',array($this,'cpanel_filters_actions'));
         $this->register_action('plugin.cpanel_filters-add',array($this,'cpanel_filters_actions'));
         $this->register_action('plugin.cpanel_filters-edit',array($this,'cpanel_filters_actions'));
+        $this->register_action('plugin.cpanel_filters-save', array($this, 'cpanel_filters_save'));
         
         // include main js script
         $this->include_script('cpanel_filters.js');
@@ -137,6 +138,14 @@ class cpanel_filters extends rcube_plugin {
         $this->cpanel_filters_send();
     } // end cpanel_filters_actions()
     
+    function cpanel_filters_save() {
+        $this->_start();
+        $nname = get_input_value('_name', RCUBE_INPUT_GPC);
+        $oname = get_input_value('_oldname', RCUBE_INPUT_GPC);
+        
+        $this->rcmail->output->show_message('you submitted!!!');
+    }
+    
     /**
      *Custom rcmail->output->send wrapper that handles the framed content
      */
@@ -204,7 +213,7 @@ class cpanel_filters extends rcube_plugin {
         // When given nothing, evalutes: NULL
         $flt = $this->filters[$fid];
         
-        $out = '<form name="filterform" action="./" method="post">'."\n";
+        $out = '<form name="filterform" id="filterform" action="./" method="post">'."\n";
         
         // Begin the form w\hidden fields
         $hiddenfields = new html_hiddenfield( array(
@@ -222,6 +231,10 @@ class cpanel_filters extends rcube_plugin {
         $hiddenfields->add( array(
                 'name'  => '_fid',
                 'value' => $fid,
+            ) );
+        $hiddenfields->add( array(
+                'name'  => '_oldname',
+                'value' => $this->filters[$fid]['filtername'],
             ) );
         $out .= $hiddenfields->show();
         

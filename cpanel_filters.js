@@ -29,6 +29,16 @@ if (window.rcmail) {
                 rcmail.cpf_frame(null,'plugin.cpanel_filters-add');
             }, true);
             
+            if (rcmail.env.action == 'plugin.cpanel_filters-add' ||
+                rcmail.env.action == 'plugin.cpanel_filters-edit') {
+                
+                rcmail.register_command('plugin.cpanel_filters-save', function() {
+                    if (parent.rcmail && parent.rcmail.filterlist)
+                        $('form#filterform').submit();
+                }, true);
+            }
+            
+            
             if ( rcmail.env.action == 'plugin.cpanel_filters-edit' ) {
                 // Register form delete button
                 rcmail.register_command('plugin.cpanel_filters-delete', function() {
