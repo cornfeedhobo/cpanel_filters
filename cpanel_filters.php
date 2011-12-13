@@ -156,9 +156,12 @@ class cpanel_filters extends rcube_plugin {
                 $save_basics['oldfiltername'] = $oname;
             }
         } elseif ( $nname == '' ) {
-            $this->rcmail->output->show_message('cpanel_filters.filterMissingName');
-            $this->rcmail->output->command('cpf_reload','plugin.cpanel_filters');
-            $this->cpanel_filters_send();
+            $this->rcmail->output->redirect( array(
+                '_task'     => 'settings',
+                '_action'   => 'plugin.cpanel_filters-edit',
+                '_framed'   =>  1,
+                '_fid'      => $fid,
+            ) );
             return;
         }
         
@@ -204,8 +207,7 @@ class cpanel_filters extends rcube_plugin {
             $this->rcmail->output->show_message('cpanel_filters.filterErrorUnknown');
         } elseif ( $query['cpanelresult']['data'][0]['result'] == 'Filter Saved.' ) {
             $this->rcmail->output->show_message('cpanel_filters.filterSaved');
-            $this->rcmail->output->command('cpf_reload','plugin.cpanel_filters');
-            $this->cpanel_filters_send();
+            $this->rcmail->output->command('parent.cpf_reload','plugin.cpanel_filters');
         }
     }
     
@@ -256,8 +258,8 @@ class cpanel_filters extends rcube_plugin {
             $attrib['id'] = 'rcmcpfframe';
         $attrib['name'] = $attrib['id'];
         $this->rcmail->output->set_env('contentframe', $attrib['name']);
-        $this->rcmail->output->set_env('blankpage', $attrib['src'] ?
-        $this->rcmail->output->abs_url($attrib['src']) : 'program/blank.gif');
+        $this->rcmail->output->set_env('blankpage',
+                $attrib['src'] ? $this->rcmail->output->abs_url($attrib['src']) : 'program/blank.gif');
         return html::tag('iframe', $attrib);
     } // end html_filterframe
     
