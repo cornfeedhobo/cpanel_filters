@@ -32,10 +32,10 @@ if (window.rcmail) {
             if ( rcmail.env.action == 'plugin.cpanel_filters-edit' ) {
                 // Register form delete button
                 rcmail.register_command('plugin.cpanel_filters-delete', function() {
-                    var id = parent.rcmail.filters_list.get_single_selection();
-                    if (confirm(rcmail.get_label('cpanel_filters.filterDelete')))
+                    var id = parent.rcmail.filterlist.get_single_selection();
+                    if (confirm(rcmail.get_label('cpanel_filters.filterDeleteconfirm')))
                         rcmail.http_request('plugin.cpanel_filters','_act=delete&_fid='+
-                            parent.rcmail.filters_list.rows[id].uid, true);
+                            parent.rcmail.filterlist.rows[id].uid, true);
                 }, true);
             }
             
@@ -162,3 +162,17 @@ rcube_webmail.prototype.cpf_formbuttons = function(field) {
         }
     }
 }
+
+rcube_webmail.prototype.cpf_reload = function() {
+    parent.rcmail.set_busy(true);
+    parent.rcmail.goto_url('plugin.cpanel_filters');
+    parent.rcmail.set_busy(false);
+}
+
+
+rcube_webmail.prototype.cpf_rowid = function(id) {
+    var i, rows = parent.rcmail.filterlist.rows;
+    for (i=0; i<rows.length; i++)
+        if (rows[i] != null && rows[i].uid == id)
+            return i;
+};

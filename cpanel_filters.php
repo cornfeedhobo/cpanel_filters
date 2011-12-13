@@ -125,9 +125,10 @@ class cpanel_filters extends rcube_plugin {
                 $msg = get_object_vars($msg['cpanelresult']);
                 $msg = get_object_vars($msg['data'][0]);
                 if ( strpos( $msg['statusmsg'], 'deleted') === FALSE ) {
-                    $this->rc->output->show_message('cpanel_filters.filterDeleteerror','error');
+                    $this->rcmail->output->show_message('cpanel_filters.filterDeleteerror','error');
                 } else {
-                    $this->rc->output->show_message('cpanel_filters.filterDeleted','notice',null,true,6);
+                    $this->rcmail->output->show_message('cpanel_filters.filterDeleted','notice',null,true,6);
+                    $this->rcmail->output->command('cpf_reload');
                 }
             }
             $this->rcmail->output->send();
