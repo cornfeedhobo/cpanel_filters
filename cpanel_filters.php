@@ -12,7 +12,8 @@
  * @copyright 2008-2011, The Roundcube Dev Team
  */
 
-class cpanel_filters extends rcube_plugin {
+class cpanel_filters extends rcube_plugin
+{
     public $task = 'settings';
     private $rcmail; // RC class
     private $xmlapi; //cpanel xmlapi class
@@ -48,15 +49,20 @@ class cpanel_filters extends rcube_plugin {
     /**
      * Roundcube init handler (mandatory)
      */
-    function init() {
+    function init()
+    {
         // add Tab label/title
         $this->add_texts('localization/', true);
         
         // register javascript actions
-        $this->register_action('plugin.cpanel_filters',array($this,'cpanel_filters_actions'));
-        $this->register_action('plugin.cpanel_filters-add',array($this,'cpanel_filters_actions'));
-        $this->register_action('plugin.cpanel_filters-edit',array($this,'cpanel_filters_actions'));
-        $this->register_action('plugin.cpanel_filters-save', array($this, 'cpanel_filters_save'));
+        $this->register_action('plugin.cpanel_filters',
+                array($this,'cpanel_filters_actions') );
+        $this->register_action('plugin.cpanel_filters-add',
+                array($this,'cpanel_filters_actions') );
+        $this->register_action('plugin.cpanel_filters-edit',
+                array($this,'cpanel_filters_actions') );
+        $this->register_action('plugin.cpanel_filters-save',
+                array($this, 'cpanel_filters_save') );
         
         // include main js script
         $this->include_script('cpanel_filters.js');
@@ -66,7 +72,8 @@ class cpanel_filters extends rcube_plugin {
      * Sets up the xmlapi connection, sets $this->filters
      * Adds UI handlers
      */
-    function _start() {
+    function _start()
+    {
         $this->rcmail = rcmail::get_instance();
         $this->load_config(); // load our config
 
@@ -99,7 +106,8 @@ class cpanel_filters extends rcube_plugin {
         $this->filters = $query['cpanelresult']['data'];
     } // end _start()
     
-    function cpanel_filters_actions() {
+    function cpanel_filters_actions()
+    {
         $this->_start();
         
         if ($action = get_input_value('_act', RCUBE_INPUT_GPC)) {
@@ -111,12 +119,14 @@ class cpanel_filters extends rcube_plugin {
                 $bttnrow = get_input_value('_rid', RCUBE_INPUT_GPC);
                 $content = $this->parse_rules($fid, 4097);
                 $this->rcmail->output->command('cpf_insertrow', $content, $bttnrow, 'rulerow');
-            } elseif ($action == 'actionadd') {
+            }
+            elseif ($action == 'actionadd') {
                 // JS will rename rows anyways, why care about id#?
                 $bttnrow = get_input_value('_aid', RCUBE_INPUT_GPC);
                 $content = $this->parse_actions($fid, 4097);
                 $this->rcmail->output->command('cpf_insertrow', $content, $bttnrow, 'actionrow');
-            } elseif ($action == 'delete') {
+            }
+            elseif ($action == 'delete') {
                 $res[] = json_decode($this->xmlapi->api2_query( $this->cuser,
                         'Email', 'deletefilter', array(
                             account     => $this->rcmail->user->get_username(),
@@ -127,18 +137,19 @@ class cpanel_filters extends rcube_plugin {
                 $msg = get_object_vars($msg['data'][0]);
                 if ( strpos( $msg['statusmsg'], 'deleted') === FALSE ) {
                     $this->rcmail->output->show_message('cpanel_filters.filterDeleteerror','error');
-                } else {
+                }
+                else {
                     $this->rcmail->output->show_message('cpanel_filters.filterDeleted','notice',null,true,6);
                     $this->rcmail->output->command('cpf_reload', 'plugin.cpanel_filters');
                 }
             }
             $this->rcmail->output->send();
         }
-        
         $this->cpanel_filters_send();
     } // end cpanel_filters_actions()
     
-    function cpanel_filters_save() {
+    function cpanel_filters_save()
+    {
         $this->_start();
         $fid            = get_input_value('_fid', RCUBE_INPUT_GPC);
         $nname          = get_input_value('_name', RCUBE_INPUT_GPC);
@@ -150,12 +161,14 @@ class cpanel_filters extends rcube_plugin {
             if ( $nname == $oname ) {
                 $save_basics['account'] = $this->rcmail->user->get_username();
                 $save_basics['filtername'] = $nname;
-            } elseif (true) {
+            }
+            elseif (true) {
                 $save_basics['account'] = $this->rcmail->user->get_username();
                 $save_basics['filtername'] = $nname;
                 $save_basics['oldfiltername'] = $oname;
             }
-        } elseif ( $nname == '' ) {
+        }
+        elseif ( $nname == '' ) {
             $this->rcmail->output->redirect( array(
                 '_task'     => 'settings',
                 '_action'   => 'plugin.cpanel_filters-edit',
@@ -171,15 +184,22 @@ class cpanel_filters extends rcube_plugin {
             if ( ( $iact['action'] == 'fail' || $iact['action'] == 'deliver') 
                     && $iact['dest'] == '' ) {
                 continue;
-            } elseif ( $iact['action'] == 'fail' || $iact['action'] == 'deliver' ) {
+            }
+            elseif ( $iact['action'] == 'fail' || $iact['action'] == 'deliver' ) {
                 $save_actions['action'.$x] = $iact['action'];
                 $save_dests['dest'.$x] = $iact['dest'];
-            } elseif ( $iact['action'] == 'save' ) {
+            }
+            elseif ( $iact['action'] == 'save' ) {
                 $save_actions['action'.$x] = $iact['action'];
                 if ( $iact['folder'] == 'INBOX' ) {
-                    $save_dests['dest'.$x] = $this->rcmail->config->get('cpanel_filters_maildir').$this->rcmail->user->get_username('local').'/'.$iact['folder'];
-                } else {
-                    $save_dests['dest'.$x] = $this->rcmail->config->get('cpanel_filters_maildir').$this->rcmail->user->get_username('local').'/.'.$iact['folder'];
+                    $save_dests['dest'.$x] = $this->rcmail->config->get('cpanel_filters_maildir') .
+                            $this->rcmail->user->get_username('local') .
+                            '/' . $iact['folder'];
+                }
+                else {
+                    $save_dests['dest'.$x] = $this->rcmail->config->get('cpanel_filters_maildir') .
+                            $this->rcmail->user->get_username('local') .
+                            '/.' . $iact['folder'];
                 }
             }
         }
@@ -189,7 +209,8 @@ class cpanel_filters extends rcube_plugin {
             $x = count($save_matches)+1;
             if ( $irule['val'] == '' ) {
                 continue;
-            } elseif ( $irule['val'] != '' ) {
+            }
+            elseif ( $irule['val'] != '' ) {
                 $save_matches['match'.$x] = $irule['match'];
                 $save_parts['part'.$x] = $irule['part'];
                 $save_values['val'.$x] = $irule['val'];
@@ -198,14 +219,16 @@ class cpanel_filters extends rcube_plugin {
         }
         $save_options['opt'.count($save_options)] = 'or';
         
-        $save = array_merge($save_basics,$save_actions,$save_dests,$save_matches,$save_parts,$save_values,$save_options);
+        $save = array_merge( $save_basics, $save_actions, $save_dests,
+                    $save_matches, $save_parts, $save_values, $save_options);
         $query = json_decode( $this->xmlapi->api2_query( $this->cuser, 'Email',
                     'storefilter', $save), true );
         
         if ( $query['cpanelresult']['data'][0]['error'] != 0 ||
                 $query['cpanelresult']['data'][0]['result'] != 'Filter Saved.' ) {
             $this->rcmail->output->show_message('cpanel_filters.filterErrorUnknown');
-        } elseif ( $query['cpanelresult']['data'][0]['result'] == 'Filter Saved.' ) {
+        }
+        elseif ( $query['cpanelresult']['data'][0]['result'] == 'Filter Saved.' ) {
             $this->rcmail->output->show_message('cpanel_filters.filterSaved');
             $this->rcmail->output->command('parent.cpf_reload','plugin.cpanel_filters');
         }
@@ -214,11 +237,13 @@ class cpanel_filters extends rcube_plugin {
     /**
      *Custom rcmail->output->send wrapper that handles the framed content
      */
-    function cpanel_filters_send() {
+    function cpanel_filters_send()
+    {
         // Handle the frame
         if (isset($_GET['_framed']) || isset($_POST['_framed'])) {
             $this->rcmail->output->send('cpanel_filters.filteredit');
-        } else {
+        }
+        else {
             $this->rcmail->output->set_pagetitle( Q( $this->gettext('filterManage') ) );
             $this->rcmail->output->send('cpanel_filters.cpanel_filters');
         }
@@ -229,7 +254,8 @@ class cpanel_filters extends rcube_plugin {
      * @param string $attrib Provided by RC's template engine
      * @return mixed XHTML output
      */
-    function html_filterlist($attrib) {
+    function html_filterlist($attrib)
+    {
         // Set the HTML ID attribute if not specified
         if (!$attrib['id'])
             $attrib['id'] = 'rcmcpflist';
@@ -252,14 +278,15 @@ class cpanel_filters extends rcube_plugin {
      * @param type $attrib Provided by RC's template engine
      * @return mixed XHTML output
      */
-    function html_filterframe($attrib) {
+    function html_filterframe($attrib)
+    {
         // Set the HTML ID attribute if not specified
         if (!$attrib['id'])
             $attrib['id'] = 'rcmcpfframe';
         $attrib['name'] = $attrib['id'];
         $this->rcmail->output->set_env('contentframe', $attrib['name']);
-        $this->rcmail->output->set_env('blankpage',
-                $attrib['src'] ? $this->rcmail->output->abs_url($attrib['src']) : 'program/blank.gif');
+        $this->rcmail->output->set_env('blankpage', $attrib['src'] ? 
+                $this->rcmail->output->abs_url($attrib['src']) : 'program/blank.gif');
         return html::tag('iframe', $attrib);
     } // end html_filterframe
     
@@ -268,7 +295,8 @@ class cpanel_filters extends rcube_plugin {
      * @param type $attr Provided by RC's template engine
      * @return mixed XHTML output
      */
-    function html_filterform($attr) {
+    function html_filterform($attr)
+    {
         // Set the HTML ID attribute if not specified
         if (!$attrib['id'])
             $attrib['id'] = 'rcmcpfform';
@@ -278,7 +306,7 @@ class cpanel_filters extends rcube_plugin {
         // When given nothing, evalutes: NULL
         $flt = $this->filters[$fid];
         
-        $out = '<form name="filterform" id="filterform" action="./" method="post">'."\n";
+        $out = '<form name="filterform" id="filterform" action="./" method="post">' . "\n";
         
         // Begin the form w\hidden fields
         $hiddenfields = new html_hiddenfield( array(
@@ -321,7 +349,8 @@ class cpanel_filters extends rcube_plugin {
                 '_name', Q( $this->gettext('filterName') ), $input_name);
         
         // Process the Rules (accounts for $fid==null)
-        $out .= '<fieldset><legend>'.Q($this->gettext('filterRules')).'</legend>'."\n";
+        $out .= '<fieldset><legend>' . Q( $this->gettext('filterRules') ) .
+                '</legend>' . "\n";
         $rows = ( $flt != null ) ? sizeof( $flt['rules'] ) : 1;
         $out .= '<div id="rules">';
         for ( $i=0; $i<$rows; $i++ )
@@ -329,7 +358,8 @@ class cpanel_filters extends rcube_plugin {
         $out .= '</div>'."\n".'</fieldset>'."\n";
         
         // Process the Actions
-        $out .= '<fieldset><legend>' . Q( $this->gettext('filterActions') ) . '</legend>'."\n";
+        $out .= '<fieldset><legend>' . Q( $this->gettext('filterActions') ) .
+                '</legend>'."\n";
         $rows = ( $flt != null ) ? sizeof($flt['actions']) : 1;
         $out .= '<div id="actions">';
         for ( $i=0; $i<$rows; $i++ )
@@ -349,9 +379,10 @@ class cpanel_filters extends rcube_plugin {
      * @param bool $div Include <div> wrapper
      * @return mixed XHTML output
      */
-    function parse_rules( $fid, $rid, $div = true ) {  // fid = NULL,rid = int(0)
-        $rule = $this->filters[$fid]['rules'][$rid];  // returns NULL
-        $rows = sizeof($this->filters[$fid]['rules']);  // returns int(0)
+    function parse_rules( $fid, $rid, $div = true )
+    {
+        $rule = $this->filters[$fid]['rules'][$rid];
+        $rows = sizeof($this->filters[$fid]['rules']);
         
         // handle div wrapper for dynamic adding
         $out = $div ? '<div class="rulerow" id="rulerow'.$rid.'">'."\n" : '';
@@ -385,9 +416,10 @@ class cpanel_filters extends rcube_plugin {
         
         $out .= '<input type="text" name="_rules[' . $rid . '][val]" id="value' .
                 $rid . '"value="' . Q($rule['val']) . '" class="required' .
-                ( ( $rule['match']=='is' && ( $rule['part']=='$header_from:' ||
+                ( ( ( $rule['match']=='is' && ( $rule['part']=='$header_from:' ||
                 $rule['part']=='$header_to:' || $rule['part']=='$reply_address:' ||
-                $rule['part']=='foranyaddress $h_to:,$h_cc:,$h_bcc:' ) ) ? ' email' : '' ) . '" size="20" />' .
+                $rule['part']=='foranyaddress $h_to:,$h_cc:,$h_bcc:' ) ||
+                !isset($rule['match']) ) ) ? ' email' : '' ) . '" size="20" />' .
                 "\n" . '</td>';
         
         // Create AND/OR <select> list
@@ -400,7 +432,8 @@ class cpanel_filters extends rcube_plugin {
         $select_opt->add( Q($this->gettext('filterOr')), Q('or') );
         $select_opt->add( Q($this->gettext('filterAnd')), Q('and') );
         if ( isset($rule['opt']) )
-            $out .= $select_opt->show( ( $rule['opt']=='and' ? Q($this->gettext('filterAnd')) : Q($this->gettext('filterOr')) ) );
+            $out .= $select_opt->show( ( $rule['opt']=='and' ?
+                Q( $this->gettext('filterAnd') ) : Q( $this->gettext('filterOr') ) ) );
         else
             $out .= $select_opt->show();
         $out .= '</td>';
@@ -430,7 +463,8 @@ class cpanel_filters extends rcube_plugin {
      * @param bool $div Include <div> wrapper
      * @return mixed XHTML output
      */
-    function parse_actions( $fid, $aid, $div = true ) {
+    function parse_actions( $fid, $aid, $div = true )
+    {
         $action = $this->filters[$fid]['actions'][$aid];
         $rows = sizeof($this->filters[$fid]['actions']);
         
@@ -461,15 +495,19 @@ class cpanel_filters extends rcube_plugin {
                 ( ( $action['action']=='deliver' || $action['action']=='fail' ||
                 !isset($action['action']) ) ? Q($action['dest'], 'strict', false) : '').
                 '" size="40" style="display:' .
-                ( ( $action['action']=='deliver' || $action['action']=='fail' ) ? 'inline' : 'none' ) . '" />';
+                ( ( $action['action']=='deliver' || $action['action']=='fail' ) ?
+                'inline' : 'none' ) . '" />';
         if ($action['action'] == 'save') {
             // TODO: add handler for windows slashes
             if ( end(explode('/',$action['dest'])) == 'INBOX' ) {
                 $mailbox = 'Inbox';
-            } else {
-                $mailbox = substr(end(explode('/',$action['dest'])),1,(strlen(end(explode('/',$action['dest'])))-1));
             }
-        } else {
+            else {
+                $mailbox = substr(end(explode('/',$action['dest'])),1,
+                        (strlen(end(explode('/',$action['dest'])))-1));
+            }
+        }
+        else {
             $mailbox = '';
         }
         $this->rcmail->imap_connect();
@@ -479,7 +517,8 @@ class cpanel_filters extends rcube_plugin {
 	        'id' => 'mailbox'.$aid,
 	        'name' => '_actions['.$aid.'][folder]',
 	        'style' => 'display:'.
-                ( ( $action['action']=='save' || !isset($action['action']) ) ? 'inline' : 'none' ),
+                ( ( $action['action']=='save' || !isset($action['action'] ) ) ?
+                'inline' : 'none' ),
 	    ));
         $out .= $select_box->show($mailbox);
         $out .= '</td>';
