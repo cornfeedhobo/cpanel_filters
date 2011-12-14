@@ -383,8 +383,12 @@ class cpanel_filters extends rcube_plugin {
         else
             $out .= $select_match->show();
         
-        $out .= '<input type="text" name="_rules['.$rid.'][val]" id="value' . $rid .
-                '"value="' .Q($rule['val']). '" size="20" />'."\n".'</td>';
+        $out .= '<input type="text" name="_rules[' . $rid . '][val]" id="value' .
+                $rid . '"value="' . Q($rule['val']) . '" class="required' .
+                ( ( $rule['match']=='is' && ( $rule['part']=='$header_from:' ||
+                $rule['part']=='$header_to:' || $rule['part']=='$reply_address:' ||
+                $rule['part']=='foranyaddress $h_to:,$h_cc:,$h_bcc:' ) ) ? ' email' : '' ) . '" size="20" />' .
+                "\n" . '</td>';
         
         // Create AND/OR <select> list
         $out .= '<td class="rowopts">';

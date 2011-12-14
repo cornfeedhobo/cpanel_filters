@@ -100,10 +100,36 @@ rcube_webmail.prototype.cpf_formbuttons = function(field) {
         if ( field == 'rulerow' || field == 'both' ) {
             $('div.rulerow').each(function(i){$(this).attr('id', 'rulerow'+i);});
             $('select[name$="[part]"]').each(function(i){
+                $(this).change(function() {
+                    if ( ( $(this).val() == '$header_from:' ||
+                           $(this).val() == '$header_to:' ||
+                           $(this).val() == '$header_from:' ||
+                           $(this).val() == '$reply_address:' ||
+                           $(this).val() == 'foranyaddress $h_to:,$h_cc:,$h_bcc:' ) &&
+                           $('select#match'+i).val() == 'is' ) {
+                        
+                        $('input#value'+i).addClass('email');
+                    } else if ( $(this).val() != 'is' ) {
+                        $('input#value'+i).removeClass('email');
+                    }
+                } );
                 $(this).attr('name', '_rules['+i+'][part]');
                 $(this).attr('id', 'header'+i);
             });
             $('select[name$="[match]"]').each(function(i){
+                $(this).change(function() {
+                    if ( $(this).val() == 'is' && (
+                        $('select#header'+i).val() == '$header_from:' ||
+                        $('select#header'+i).val() == '$header_to:' ||
+                        $('select#header'+i).val() == '$header_from:' ||
+                        $('select#header'+i).val() == '$reply_address:' ||
+                        $('select#header'+i).val() == 'foranyaddress $h_to:,$h_cc:,$h_bcc:' ) ) {
+                        
+                        $('input#value'+i).addClass('email');
+                    } else if ( $(this).val() != 'is' ) {
+                        $('input#value'+i).removeClass('email');
+                    }
+                } );
                 $(this).attr('name', '_rules['+i+'][match]');
                 $(this).attr('id', 'match'+i);
             });
