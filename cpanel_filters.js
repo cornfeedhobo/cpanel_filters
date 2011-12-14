@@ -142,9 +142,15 @@ rcube_webmail.prototype.cpf_formbuttons = function(field) {
                     if ( $(this).val() == 'deliver' || $(this).val() == 'fail' ) {
                         $('select#mailbox'+i).hide();
                         $('input#dest'+i).show();
+                        $('input#dest'+i).addClass('required');
+                        if ( $(this).val() == 'deliver' )
+                            $('input#dest'+i).addClass('email');
+                        else if ( $(this).val() == 'fail' )
+                            $('input#dest'+i).removeClass('email');
                     } else if ( $(this).val() == 'save' ) {
                         $('input#dest'+i).hide();
                         $('select#mailbox'+i).show();
+                        $('input#dest'+i).removeClass('required email');
                     }
                 });
                 $(this).attr('name', '_actions['+i+'][action]');
