@@ -34,6 +34,7 @@ if (window.rcmail) {
                 // Register and control the Save button
                 rcmail.register_command('plugin.cpanel_filters-save', function() {
                     if (parent.rcmail && parent.rcmail.filterlist)
+                        $('form#filterform').validate();
                         $('form#filterform').submit();
                 }, true);
             }
@@ -52,7 +53,6 @@ if (window.rcmail) {
         }
     });
 };
-
 /*********************************************************/
 /*********       cPanel Filters UI methods       *********/
 /*********************************************************/
@@ -70,10 +70,6 @@ rcube_webmail.prototype.cpf_frame = function(fid, action) {
         target.location.href = this.env.comm_path+'&_action='+action+'&_framed=1&_fid='+fid+'&_unlock='+msgid;
     }
 }
-
-/*********************************************************/
-/*********   cPanel Filters Form Edit methods    *********/
-/*********************************************************/
 rcube_webmail.prototype.cpf_ruleadd = function(bttnrow) {
     this.http_post('plugin.cpanel_filters', '_act=ruleadd&_rid='+bttnrow);
 };
@@ -142,6 +138,15 @@ rcube_webmail.prototype.cpf_formbuttons = function(field) {
         if ( field == 'actionrow' || field == 'both' ) {
             $('div.actionrow').each(function(i){$(this).attr('id', 'actionrow'+i);});
             $('select[name$="[action]"]').each(function(i){
+                $(this).change(function() {
+                    if ( $(this).val() == 'deliver' || $(this).val() == 'fail' ) {
+                        $('select#mailbox'+i).hide();
+                        $('input#dest'+i).show();
+                    } else if ( $(this).val() == 'save' ) {
+                        $('input#dest'+i).hide();
+                        $('select#mailbox'+i).show();
+                    }
+                });
                 $(this).attr('name', '_actions['+i+'][action]');
                 $(this).attr('id', 'action'+i);
             });
@@ -172,14 +177,11 @@ rcube_webmail.prototype.cpf_formbuttons = function(field) {
         }
     }
 }
-
 rcube_webmail.prototype.cpf_reload = function(url) {
     parent.rcmail.set_busy(true);
     parent.rcmail.goto_url(url);
     parent.rcmail.set_busy(false);
 }
-
-
 rcube_webmail.prototype.cpf_rowid = function(id) {
     var i, rows = parent.rcmail.filterlist.rows;
     for (i=0; i<rows.length; i++)

@@ -43,9 +43,6 @@
 #filterlist #filterlist-table td.control a.down_arrow {
     background-position: 0 -18px;
 }
-
-
-
 #filter-box {
   position: absolute;
   top: 85px;
@@ -67,4 +64,52 @@
 body.iframe {
   min-width: 740px;
   width: expression(Math.max(740, document.documentElement.clientWidth)+'px');
+}
+
+div.rulerow, div.actionrow {
+  width: auto;
+  padding: 2px;
+  white-space: nowrap;
+  border: 1px solid #F2F2F2;
+}
+div.rulerow:hover, div.actionrow:hover {
+  padding: 2px;
+  white-space: nowrap;
+  background: #F9F9F9;
+  border: 1px solid silver;
+}
+div.rulerow table, div.actionrow table {
+  width: 100%;
+}
+
+td.rowactions {
+  white-space: nowrap;
+  width: 1%;
+}
+td.rowdest {
+  white-space: nowrap;
+  width: 2%;
+  padding-left: 10px;
+}
+td.rowparts {
+  white-space: nowrap;
+  width: 1%;
+}
+td.rowmatches {
+  white-space: nowrap;
+  width: 2%;
+  padding-left: 10px;
+}
+td.rowmatches input {
+    white-space: nowrap;
+    width: 220px;
+}
+
+
+
+
+td.rowbuttons {
+  text-align: right;
+  white-space: nowrap;
+  width: 30%;
 }

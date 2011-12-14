@@ -18,27 +18,27 @@ class cpanel_filters extends rcube_plugin {
     private $xmlapi; //cpanel xmlapi class
     private $cuser; // cpanel user is needed in various places
     private $filters = array(); // Raw filter output from cpanel
-    private $headers = array( //
-        'filterFrom'        => '$header_from:',
-        'filterSubject'     => '$header_subject:',
-        'filterTo'          => '$header_to:',
-        'filterReply'       => '$reply_address:',
-        'filterBody'        => '$message_body',
-        'filterHeader'      => '$message_headers',
-        'filterRecipient'   => 'foranyaddress $h_to:,$h_cc:,$h_bcc:',
+    private $headers = array( // Available Headers to search in
+        '$header_from:'                         => 'filterFrom',
+        '$header_subject:'                      => 'filterSubject',
+        '$header_to:'                           => 'filterTo',
+        '$reply_address:'                       => 'filterReply',
+        '$message_body'                         => 'filterBody',
+        '$message_headers'                      => 'filterHeader',
+        'foranyaddress $h_to:,$h_cc:,$h_bcc:'   => 'filterRecipient',
     );
-    private $matches = array(
-        'filterEquals'          => 'is',
-        'filterRegex'           => 'matches',
-        'filterContains'        => 'contains',
-        'filterNotcontains'     => 'does not contain',
-        'filterBeginwith'       => 'begins',
-        'filterEndswith'        => 'ends',
-        'filterNotbeginwith'    => 'does not begin',
-        'filterNotendwith'      => 'does not end',
-        'filterNotmatch'        => 'does not match',
+    private $matches = array( // Types of matching available
+        'is'                => 'filterEquals',
+        'matches'           => 'filterRegex',
+        'contains'          => 'filterContains',
+        'does not contain'  => 'filterNotcontains',
+        'begins'            => 'filterBeginwith',
+        'ends'              => 'filterEndswith',
+        'does not begin'    => 'filterNotbeginwith',
+        'does not end'      => 'filterNotendwith',
+        'does not match'    => 'filterNotmatch',
     );
-    private $actions = array(
+    private $actions = array( // Types of actions available
         'save'      => 'filterDeliver',
         'deliver'   => 'filterRedirect',
         'fail'      => 'filterFail',
@@ -308,7 +308,7 @@ class cpanel_filters extends rcube_plugin {
                 'name'  => '_name',
                 'id'    => '_name',
                 'size'  => 30,
-                'class' => 'filtername',
+                'class' => 'filtername required',
             ) );
         
         // If we are given a filter, load it's name
@@ -337,7 +337,7 @@ class cpanel_filters extends rcube_plugin {
         $out .= '</div>'."\n".'</fieldset>'."\n";
         
         $this->rcmail->output->add_gui_object('filterform', $attrib['id']);
-        
+        $this->include_script( 'jquery.validate.js' );
         return $out;
     }
     
@@ -362,11 +362,10 @@ class cpanel_filters extends rcube_plugin {
                 'name'      => '_rules['.$rid.'][part]',
                 'id'        => 'header'.$rid,
             ) );
-        foreach($this->headers as $name => $header)
+        foreach($this->headers as $header => $name)
             $select_header->add( Q($this->gettext($name)), Q($header) );
         if ( $rule['part'] != null )
-            $out .= $select_header->show( Q( $this->gettext(
-                    $this->headers[$rule['part']] ) ) );
+            $out .= $select_header->show( Q( $this->gettext( $this->headers[$rule['part']] ) ) );
         else
             $out .= $select_header->show();
         $out .= '</td>';
@@ -377,7 +376,7 @@ class cpanel_filters extends rcube_plugin {
                 'name'  => '_rules['.$rid.'][match]',
                 'id'    => 'match'.$rid,
             ) );
-        foreach($this->matches as $name => $match)
+        foreach($this->matches as $match => $name)
             $select_match->add( Q($this->gettext($name) ), Q($match) );
         if ( isset($rule['match']) )
             $out .= $select_match->show( Q( $this->gettext($this->matches[$rule['match']]) ) );
@@ -453,7 +452,7 @@ class cpanel_filters extends rcube_plugin {
         
         // Create Action destination inputs
         $out .= '<td class="rowdest">';
-        $out .= '<input type="text" name="_actions['.aid.'][dest]" id="dest'.$aid.
+        $out .= '<input type="text" name="_actions['.$aid.'][dest]" id="dest'.$aid.
                 '" value="'.
                 ( ( $action['action']=='deliver' || $action['action']=='fail' ||
                 !isset($action['action']) ) ? Q($action['dest'], 'strict', false) : '').
